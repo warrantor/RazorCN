@@ -1,6 +1,6 @@
 using RazorCN.Lib.Utilities;
 
-namespace RazorCN.Lib.Pages.Shared;
+namespace RazorCN.Lib.Pages.Shared.UI;
 
 /// <summary>
 /// Button style variants

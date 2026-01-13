@@ -1,6 +1,8 @@
 ﻿@page
 @model IndexModel
 @using RazorCN.Lib.Pages.Shared
+@using RazorCN.Lib.Pages.Shared.UI
+
 @{
     ViewData["Title"] = "Home page";
 }
@@ -13,25 +15,43 @@
     <p class="text-muted-foreground mb-6">shadcn-style buttons built with Tailwind CSS v4</p>
     
     <div class="flex flex-wrap justify-center gap-2 mb-8">
-        <partial name="_Button" model="@(new ButtonModel { Text = "Default" })"/>
-        <partial name="_Button" model="@(new ButtonModel { Text = "Secondary", Variant = ButtonVariant.Secondary })"/>
-        <partial name="_Button" model="@(new ButtonModel { Text = "Destructive", Variant = ButtonVariant.Destructive })"/>
-        <partial name="_Button" model="@(new ButtonModel { Text = "Outline", Variant = ButtonVariant.Outline })"/>
-        <partial name="_Button" model="@(new ButtonModel { Text = "Ghost", Variant = ButtonVariant.Ghost })"/>
-        <partial name="_Button" model="@(new ButtonModel { Text = "Link", Variant = ButtonVariant.Link })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Default" })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Secondary", Variant = ButtonVariant.Secondary })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Destructive", Variant = ButtonVariant.Destructive })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Outline", Variant = ButtonVariant.Outline })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Ghost", Variant = ButtonVariant.Ghost })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Link", Variant = ButtonVariant.Link })"/>
     </div>
     
     <h3 class="text-lg font-medium mt-8 mb-3">Sizes</h3>
     <div class="flex flex-wrap justify-center items-center gap-2 mb-8">
-        <partial name="_Button" model="@(new ButtonModel { Text = "Small", Size = "sm" })"/>
-        <partial name="_Button" model="@(new ButtonModel { Text = "Default" })"/>
-        <partial name="_Button" model="@(new ButtonModel { Text = "Large", Size = "lg" })"/>
-        <partial name="_Button" model="@(new ButtonModel { Text = "Extra Large", Size = "xl" })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Small", Size = "sm" })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Default" })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Large", Size = "lg" })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Extra Large", Size = "xl" })"/>
     </div>
     
     <h3 class="text-lg font-medium mt-8 mb-3">States</h3>
     <div class="flex flex-wrap justify-center gap-2">
-        <partial name="_Button" model="@(new ButtonModel { Text = "Enabled" })"/>
-        <partial name="_Button" model="@(new ButtonModel { Text = "Disabled", Disabled = true })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Enabled" })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Disabled", Disabled = true })"/>
+    </div>
+    
+    <h2 class="text-xl font-semibold mt-12 mb-3">Using TagHelpers (Source Generated)</h2>
+    <p class="text-muted-foreground mb-6">Same buttons using auto-generated TagHelper syntax</p>
+    
+    <div class="flex flex-wrap justify-center gap-2 mb-8">
+        <Button text="Default" />
+        <rcn-button text="Secondary" variant="Secondary" />
+        <rcn-button text="Destructive" variant="Destructive" />
+        <rcn-button text="Outline" variant="Outline" />
+        <rcn-button text="Ghost" variant="Ghost" />
+        <rcn-button text="Link" variant="Link" />
+    </div>
+    
+    <h3 class="text-lg font-medium mt-8 mb-3">With Child Content</h3>
+    <div class="flex flex-wrap justify-center gap-2">
+        <rcn-button variant="Secondary">Click Me</rcn-button>
+        <rcn-button variant="Outline" disabled="true">Disabled Button</rcn-button>
     </div>
 </div>

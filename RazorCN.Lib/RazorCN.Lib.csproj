@@ -5,6 +5,9 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+        <!-- Emit generated source files to disk for debugging -->
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,6 +16,9 @@
 
     <ItemGroup>
         <ProjectReference Include="..\TW-Merge\TW-Merge.csproj" />
+        <ProjectReference Include="..\RazorCN.Generators\RazorCN.Generators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
     </ItemGroup>
 
     <!-- Ensure pnpm dependencies are installed -->
