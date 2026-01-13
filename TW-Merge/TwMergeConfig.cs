@@ -40,7 +40,8 @@ public sealed class TwMergeConfig
             .WithClasses("visible", "invisible", "collapse"));
 
         Add(new ClassGroup("z")
-            .WithValidator(v => v.StartsWith("z-")));
+            .WithClasses("z-auto")
+            .WithValidator(v => v.StartsWith("z-") && (ClassValidators.IsInteger(v[2..]) || ClassValidators.IsArbitraryValue(v[2..]))));
 
         Add(new ClassGroup("overflow")
             .WithClasses("overflow-auto", "overflow-hidden", "overflow-clip",
@@ -63,18 +64,18 @@ public sealed class TwMergeConfig
 
         Add(new ClassGroup("flex")
             .WithClasses("flex-1", "flex-auto", "flex-initial", "flex-none")
-            .WithValidator(v => v.StartsWith("flex-[") && v.EndsWith("]")));
+            .WithValidator(v => v.StartsWith("flex-") && ClassValidators.IsArbitraryValue(v[5..])));
 
         Add(new ClassGroup("grow")
             .WithClasses("grow", "grow-0")
-            .WithValidator(v => v.StartsWith("grow-")));
+            .WithValidator(v => v.StartsWith("grow-") && (ClassValidators.IsNumber(v[5..]) || ClassValidators.IsArbitraryValue(v[5..]))));
 
         Add(new ClassGroup("shrink")
             .WithClasses("shrink", "shrink-0")
-            .WithValidator(v => v.StartsWith("shrink-")));
+            .WithValidator(v => v.StartsWith("shrink-") && (ClassValidators.IsNumber(v[7..]) || ClassValidators.IsArbitraryValue(v[7..]))));
 
         Add(new ClassGroup("basis")
-            .WithValidator(v => v.StartsWith("basis-")));
+            .WithValidator(v => v.StartsWith("basis-") && (ClassValidators.IsSpacing(v[6..]) || ClassValidators.IsFraction(v[6..]) || ClassValidators.IsArbitraryValue(v[6..]))));
 
         Add(new ClassGroup("justify")
             .WithClasses("justify-normal", "justify-start", "justify-end", "justify-center",
@@ -102,125 +103,140 @@ public sealed class TwMergeConfig
                 "self-stretch", "self-baseline"));
 
         Add(new ClassGroup("gap")
-            .WithValidator(v => v.StartsWith("gap-") && !v.StartsWith("gap-x-") && !v.StartsWith("gap-y-"))
+            .WithValidator(v => v.StartsWith("gap-") && !v.StartsWith("gap-x-") && !v.StartsWith("gap-y-") &&
+                (ClassValidators.IsSpacing(v[4..]) || ClassValidators.IsArbitraryValue(v[4..])))
             .ConflictsWith("gap-x", "gap-y"));
 
         Add(new ClassGroup("gap-x")
-            .WithValidator(v => v.StartsWith("gap-x-")));
+            .WithValidator(v => v.StartsWith("gap-x-") && (ClassValidators.IsSpacing(v[6..]) || ClassValidators.IsArbitraryValue(v[6..]))));
 
         Add(new ClassGroup("gap-y")
-            .WithValidator(v => v.StartsWith("gap-y-")));
+            .WithValidator(v => v.StartsWith("gap-y-") && (ClassValidators.IsSpacing(v[6..]) || ClassValidators.IsArbitraryValue(v[6..]))));
 
         Add(new ClassGroup("grid-cols")
-            .WithValidator(v => v.StartsWith("grid-cols-")));
+            .WithClasses("grid-cols-none", "grid-cols-subgrid")
+            .WithValidator(v => v.StartsWith("grid-cols-") && (ClassValidators.IsInteger(v[10..]) || ClassValidators.IsArbitraryValue(v[10..]))));
 
         Add(new ClassGroup("grid-rows")
-            .WithValidator(v => v.StartsWith("grid-rows-")));
+            .WithClasses("grid-rows-none", "grid-rows-subgrid")
+            .WithValidator(v => v.StartsWith("grid-rows-") && (ClassValidators.IsInteger(v[10..]) || ClassValidators.IsArbitraryValue(v[10..]))));
 
         // ===== SPACING =====
         Add(new ClassGroup("p")
             .WithValidator(v => v.StartsWith("p-") && !v.StartsWith("px-") && !v.StartsWith("py-") &&
                 !v.StartsWith("pt-") && !v.StartsWith("pr-") && !v.StartsWith("pb-") && !v.StartsWith("pl-") &&
-                !v.StartsWith("ps-") && !v.StartsWith("pe-"))
+                !v.StartsWith("ps-") && !v.StartsWith("pe-") &&
+                (ClassValidators.IsSpacing(v[2..]) || ClassValidators.IsArbitraryValue(v[2..])))
             .ConflictsWith("px", "py", "pt", "pr", "pb", "pl", "ps", "pe"));
 
         Add(new ClassGroup("px")
-            .WithValidator(v => v.StartsWith("px-"))
+            .WithValidator(v => v.StartsWith("px-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..])))
             .ConflictsWith("pr", "pl"));
 
         Add(new ClassGroup("py")
-            .WithValidator(v => v.StartsWith("py-"))
+            .WithValidator(v => v.StartsWith("py-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..])))
             .ConflictsWith("pt", "pb"));
 
         Add(new ClassGroup("ps")
-            .WithValidator(v => v.StartsWith("ps-")));
+            .WithValidator(v => v.StartsWith("ps-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("pe")
-            .WithValidator(v => v.StartsWith("pe-")));
+            .WithValidator(v => v.StartsWith("pe-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("pt")
-            .WithValidator(v => v.StartsWith("pt-")));
+            .WithValidator(v => v.StartsWith("pt-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("pr")
-            .WithValidator(v => v.StartsWith("pr-")));
+            .WithValidator(v => v.StartsWith("pr-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("pb")
-            .WithValidator(v => v.StartsWith("pb-")));
+            .WithValidator(v => v.StartsWith("pb-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("pl")
-            .WithValidator(v => v.StartsWith("pl-")));
+            .WithValidator(v => v.StartsWith("pl-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("m")
             .WithValidator(v => v.StartsWith("m-") && !v.StartsWith("mx-") && !v.StartsWith("my-") &&
                 !v.StartsWith("mt-") && !v.StartsWith("mr-") && !v.StartsWith("mb-") && !v.StartsWith("ml-") &&
-                !v.StartsWith("ms-") && !v.StartsWith("me-"))
+                !v.StartsWith("ms-") && !v.StartsWith("me-") &&
+                (ClassValidators.IsSpacing(v[2..]) || ClassValidators.IsArbitraryValue(v[2..])))
             .ConflictsWith("mx", "my", "mt", "mr", "mb", "ml", "ms", "me"));
 
         Add(new ClassGroup("mx")
-            .WithValidator(v => v.StartsWith("mx-"))
+            .WithValidator(v => v.StartsWith("mx-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..])))
             .ConflictsWith("mr", "ml"));
 
         Add(new ClassGroup("my")
-            .WithValidator(v => v.StartsWith("my-"))
+            .WithValidator(v => v.StartsWith("my-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..])))
             .ConflictsWith("mt", "mb"));
 
         Add(new ClassGroup("ms")
-            .WithValidator(v => v.StartsWith("ms-")));
+            .WithValidator(v => v.StartsWith("ms-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("me")
-            .WithValidator(v => v.StartsWith("me-")));
+            .WithValidator(v => v.StartsWith("me-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("mt")
-            .WithValidator(v => v.StartsWith("mt-")));
+            .WithValidator(v => v.StartsWith("mt-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("mr")
-            .WithValidator(v => v.StartsWith("mr-")));
+            .WithValidator(v => v.StartsWith("mr-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("mb")
-            .WithValidator(v => v.StartsWith("mb-")));
+            .WithValidator(v => v.StartsWith("mb-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("ml")
-            .WithValidator(v => v.StartsWith("ml-")));
+            .WithValidator(v => v.StartsWith("ml-") && (ClassValidators.IsSpacing(v[3..]) || ClassValidators.IsArbitraryValue(v[3..]))));
 
         Add(new ClassGroup("space-x")
-            .WithValidator(v => v.StartsWith("space-x-")));
+            .WithClasses("space-x-reverse")
+            .WithValidator(v => v.StartsWith("space-x-") && (ClassValidators.IsSpacing(v[8..]) || ClassValidators.IsArbitraryValue(v[8..]))));
 
         Add(new ClassGroup("space-y")
-            .WithValidator(v => v.StartsWith("space-y-")));
+            .WithClasses("space-y-reverse")
+            .WithValidator(v => v.StartsWith("space-y-") && (ClassValidators.IsSpacing(v[8..]) || ClassValidators.IsArbitraryValue(v[8..]))));
 
         // ===== SIZING =====
         Add(new ClassGroup("w")
-            .WithValidator(v => v.StartsWith("w-")));
+            .WithClasses("w-auto", "w-min", "w-max", "w-fit", "w-full", "w-screen", "w-svw", "w-lvw", "w-dvw")
+            .WithValidator(v => v.StartsWith("w-") && (ClassValidators.IsNumber(v[2..]) || ClassValidators.IsFraction(v[2..]) || ClassValidators.IsArbitraryValue(v[2..]))));
 
         Add(new ClassGroup("min-w")
-            .WithValidator(v => v.StartsWith("min-w-")));
+            .WithClasses("min-w-min", "min-w-max", "min-w-fit", "min-w-full")
+            .WithValidator(v => v.StartsWith("min-w-") && (ClassValidators.IsNumber(v[6..]) || ClassValidators.IsArbitraryValue(v[6..]))));
 
         Add(new ClassGroup("max-w")
-            .WithValidator(v => v.StartsWith("max-w-")));
+            .WithClasses("max-w-none", "max-w-full", "max-w-min", "max-w-max", "max-w-fit", "max-w-prose",
+                "max-w-screen-sm", "max-w-screen-md", "max-w-screen-lg", "max-w-screen-xl", "max-w-screen-2xl")
+            .WithValidator(v => v.StartsWith("max-w-") && (ClassValidators.IsNumber(v[6..]) || ClassValidators.IsTshirtSize(v[6..]) || ClassValidators.IsArbitraryValue(v[6..]))));
 
         Add(new ClassGroup("h")
-            .WithValidator(v => v.StartsWith("h-")));
+            .WithClasses("h-auto", "h-min", "h-max", "h-fit", "h-full", "h-screen", "h-svh", "h-lvh", "h-dvh")
+            .WithValidator(v => v.StartsWith("h-") && (ClassValidators.IsNumber(v[2..]) || ClassValidators.IsFraction(v[2..]) || ClassValidators.IsArbitraryValue(v[2..]))));
 
         Add(new ClassGroup("min-h")
-            .WithValidator(v => v.StartsWith("min-h-")));
+            .WithClasses("min-h-min", "min-h-max", "min-h-fit", "min-h-full", "min-h-screen", "min-h-svh", "min-h-lvh", "min-h-dvh")
+            .WithValidator(v => v.StartsWith("min-h-") && (ClassValidators.IsNumber(v[6..]) || ClassValidators.IsArbitraryValue(v[6..]))));
 
         Add(new ClassGroup("max-h")
-            .WithValidator(v => v.StartsWith("max-h-")));
+            .WithClasses("max-h-none", "max-h-min", "max-h-max", "max-h-fit", "max-h-full", "max-h-screen", "max-h-svh", "max-h-lvh", "max-h-dvh")
+            .WithValidator(v => v.StartsWith("max-h-") && (ClassValidators.IsNumber(v[6..]) || ClassValidators.IsArbitraryValue(v[6..]))));
 
         Add(new ClassGroup("size")
-            .WithValidator(v => v.StartsWith("size-"))
+            .WithClasses("size-auto", "size-min", "size-max", "size-fit", "size-full")
+            .WithValidator(v => v.StartsWith("size-") && (ClassValidators.IsNumber(v[5..]) || ClassValidators.IsFraction(v[5..]) || ClassValidators.IsArbitraryValue(v[5..])))
             .ConflictsWith("w", "h"));
 
         // ===== TYPOGRAPHY =====
         Add(new ClassGroup("font-family")
             .WithClasses("font-sans", "font-serif", "font-mono")
-            .WithValidator(v => v.StartsWith("font-[") && v.EndsWith("]")));
+            .WithValidator(v => v.StartsWith("font-") && ClassValidators.IsArbitraryValue(v[5..])));
 
         Add(new ClassGroup("font-size")
             .WithClasses("text-xs", "text-sm", "text-base", "text-lg", "text-xl",
                 "text-2xl", "text-3xl", "text-4xl", "text-5xl", "text-6xl",
                 "text-7xl", "text-8xl", "text-9xl")
-            .WithValidator(v => v.StartsWith("text-[") && v.EndsWith("]") && !v.Contains("#")));
+            .WithValidator(v => v.StartsWith("text-") && ClassValidators.IsArbitraryLength(v[5..])));
 
         Add(new ClassGroup("font-weight")
             .WithClasses("font-thin", "font-extralight", "font-light", "font-normal",
@@ -255,12 +271,12 @@ public sealed class TwMergeConfig
         Add(new ClassGroup("leading")
             .WithClasses("leading-none", "leading-tight", "leading-snug", "leading-normal",
                 "leading-relaxed", "leading-loose")
-            .WithValidator(v => v.StartsWith("leading-")));
+            .WithValidator(v => v.StartsWith("leading-") && (ClassValidators.IsNumber(v[8..]) || ClassValidators.IsArbitraryValue(v[8..]))));
 
         Add(new ClassGroup("tracking")
             .WithClasses("tracking-tighter", "tracking-tight", "tracking-normal",
                 "tracking-wide", "tracking-wider", "tracking-widest")
-            .WithValidator(v => v.StartsWith("tracking-")));
+            .WithValidator(v => v.StartsWith("tracking-") && ClassValidators.IsArbitraryValue(v[9..])));
 
         // ===== BACKGROUNDS =====
         Add(new ClassGroup("bg-color")
@@ -417,7 +433,7 @@ public sealed class TwMergeConfig
             .WithValidator(v => v.StartsWith("shadow-") && IsColorClass(v[7..])));
 
         Add(new ClassGroup("opacity")
-            .WithValidator(v => v.StartsWith("opacity-")));
+            .WithValidator(v => v.StartsWith("opacity-") && (ClassValidators.IsNumber(v[8..]) || ClassValidators.IsArbitraryValue(v[8..]))));
 
         Add(new ClassGroup("mix-blend")
             .WithClasses("mix-blend-normal", "mix-blend-multiply", "mix-blend-screen",
@@ -440,22 +456,22 @@ public sealed class TwMergeConfig
                 "blur-2xl", "blur-3xl"));
 
         Add(new ClassGroup("brightness")
-            .WithValidator(v => v.StartsWith("brightness-")));
+            .WithValidator(v => v.StartsWith("brightness-") && (ClassValidators.IsNumber(v[11..]) || ClassValidators.IsArbitraryValue(v[11..]))));
 
         Add(new ClassGroup("contrast")
-            .WithValidator(v => v.StartsWith("contrast-")));
+            .WithValidator(v => v.StartsWith("contrast-") && (ClassValidators.IsNumber(v[9..]) || ClassValidators.IsArbitraryValue(v[9..]))));
 
         Add(new ClassGroup("grayscale")
             .WithClasses("grayscale-0", "grayscale"));
 
         Add(new ClassGroup("hue-rotate")
-            .WithValidator(v => v.StartsWith("hue-rotate-")));
+            .WithValidator(v => v.StartsWith("hue-rotate-") && (ClassValidators.IsInteger(v[11..]) || ClassValidators.IsArbitraryValue(v[11..]))));
 
         Add(new ClassGroup("invert")
             .WithClasses("invert-0", "invert"));
 
         Add(new ClassGroup("saturate")
-            .WithValidator(v => v.StartsWith("saturate-")));
+            .WithValidator(v => v.StartsWith("saturate-") && (ClassValidators.IsNumber(v[9..]) || ClassValidators.IsArbitraryValue(v[9..]))));
 
         Add(new ClassGroup("sepia")
             .WithClasses("sepia-0", "sepia"));
@@ -465,28 +481,30 @@ public sealed class TwMergeConfig
                 "drop-shadow-xl", "drop-shadow-2xl", "drop-shadow-none"));
 
         Add(new ClassGroup("backdrop-blur")
-            .WithValidator(v => v.StartsWith("backdrop-blur-")));
+            .WithClasses("backdrop-blur-none", "backdrop-blur-sm", "backdrop-blur", "backdrop-blur-md",
+                "backdrop-blur-lg", "backdrop-blur-xl", "backdrop-blur-2xl", "backdrop-blur-3xl")
+            .WithValidator(v => v.StartsWith("backdrop-blur-") && ClassValidators.IsArbitraryValue(v[14..])));
 
         Add(new ClassGroup("backdrop-brightness")
-            .WithValidator(v => v.StartsWith("backdrop-brightness-")));
+            .WithValidator(v => v.StartsWith("backdrop-brightness-") && (ClassValidators.IsNumber(v[20..]) || ClassValidators.IsArbitraryValue(v[20..]))));
 
         Add(new ClassGroup("backdrop-contrast")
-            .WithValidator(v => v.StartsWith("backdrop-contrast-")));
+            .WithValidator(v => v.StartsWith("backdrop-contrast-") && (ClassValidators.IsNumber(v[18..]) || ClassValidators.IsArbitraryValue(v[18..]))));
 
         Add(new ClassGroup("backdrop-grayscale")
             .WithClasses("backdrop-grayscale-0", "backdrop-grayscale"));
 
         Add(new ClassGroup("backdrop-hue-rotate")
-            .WithValidator(v => v.StartsWith("backdrop-hue-rotate-")));
+            .WithValidator(v => v.StartsWith("backdrop-hue-rotate-") && (ClassValidators.IsInteger(v[20..]) || ClassValidators.IsArbitraryValue(v[20..]))));
 
         Add(new ClassGroup("backdrop-invert")
             .WithClasses("backdrop-invert-0", "backdrop-invert"));
 
         Add(new ClassGroup("backdrop-opacity")
-            .WithValidator(v => v.StartsWith("backdrop-opacity-")));
+            .WithValidator(v => v.StartsWith("backdrop-opacity-") && (ClassValidators.IsNumber(v[17..]) || ClassValidators.IsArbitraryValue(v[17..]))));
 
         Add(new ClassGroup("backdrop-saturate")
-            .WithValidator(v => v.StartsWith("backdrop-saturate-")));
+            .WithValidator(v => v.StartsWith("backdrop-saturate-") && (ClassValidators.IsNumber(v[18..]) || ClassValidators.IsArbitraryValue(v[18..]))));
 
         Add(new ClassGroup("backdrop-sepia")
             .WithClasses("backdrop-sepia-0", "backdrop-sepia"));
@@ -498,13 +516,13 @@ public sealed class TwMergeConfig
                 "transition-transform"));
 
         Add(new ClassGroup("duration")
-            .WithValidator(v => v.StartsWith("duration-")));
+            .WithValidator(v => v.StartsWith("duration-") && (ClassValidators.IsInteger(v[9..]) || ClassValidators.IsArbitraryValue(v[9..]))));
 
         Add(new ClassGroup("ease")
             .WithClasses("ease-linear", "ease-in", "ease-out", "ease-in-out"));
 
         Add(new ClassGroup("delay")
-            .WithValidator(v => v.StartsWith("delay-")));
+            .WithValidator(v => v.StartsWith("delay-") && (ClassValidators.IsInteger(v[6..]) || ClassValidators.IsArbitraryValue(v[6..]))));
 
         Add(new ClassGroup("animate")
             .WithClasses("animate-none", "animate-spin", "animate-ping",
@@ -512,29 +530,30 @@ public sealed class TwMergeConfig
 
         // ===== TRANSFORMS =====
         Add(new ClassGroup("scale")
-            .WithValidator(v => v.StartsWith("scale-") && !v.StartsWith("scale-x-") && !v.StartsWith("scale-y-"))
+            .WithValidator(v => v.StartsWith("scale-") && !v.StartsWith("scale-x-") && !v.StartsWith("scale-y-") &&
+                (ClassValidators.IsNumber(v[6..]) || ClassValidators.IsArbitraryValue(v[6..])))
             .ConflictsWith("scale-x", "scale-y"));
 
         Add(new ClassGroup("scale-x")
-            .WithValidator(v => v.StartsWith("scale-x-")));
+            .WithValidator(v => v.StartsWith("scale-x-") && (ClassValidators.IsNumber(v[8..]) || ClassValidators.IsArbitraryValue(v[8..]))));
 
         Add(new ClassGroup("scale-y")
-            .WithValidator(v => v.StartsWith("scale-y-")));
+            .WithValidator(v => v.StartsWith("scale-y-") && (ClassValidators.IsNumber(v[8..]) || ClassValidators.IsArbitraryValue(v[8..]))));
 
         Add(new ClassGroup("rotate")
-            .WithValidator(v => v.StartsWith("rotate-")));
+            .WithValidator(v => v.StartsWith("rotate-") && (ClassValidators.IsInteger(v[7..]) || ClassValidators.IsArbitraryValue(v[7..]))));
 
         Add(new ClassGroup("translate-x")
-            .WithValidator(v => v.StartsWith("translate-x-")));
+            .WithValidator(v => v.StartsWith("translate-x-") && (ClassValidators.IsSpacing(v[12..]) || ClassValidators.IsFraction(v[12..]) || ClassValidators.IsArbitraryValue(v[12..]))));
 
         Add(new ClassGroup("translate-y")
-            .WithValidator(v => v.StartsWith("translate-y-")));
+            .WithValidator(v => v.StartsWith("translate-y-") && (ClassValidators.IsSpacing(v[12..]) || ClassValidators.IsFraction(v[12..]) || ClassValidators.IsArbitraryValue(v[12..]))));
 
         Add(new ClassGroup("skew-x")
-            .WithValidator(v => v.StartsWith("skew-x-")));
+            .WithValidator(v => v.StartsWith("skew-x-") && (ClassValidators.IsInteger(v[7..]) || ClassValidators.IsArbitraryValue(v[7..]))));
 
         Add(new ClassGroup("skew-y")
-            .WithValidator(v => v.StartsWith("skew-y-")));
+            .WithValidator(v => v.StartsWith("skew-y-") && (ClassValidators.IsInteger(v[7..]) || ClassValidators.IsArbitraryValue(v[7..]))));
 
         Add(new ClassGroup("transform-origin")
             .WithClasses("origin-center", "origin-top", "origin-top-right", "origin-right",
@@ -585,34 +604,44 @@ public sealed class TwMergeConfig
 
         // ===== POSITION =====
         Add(new ClassGroup("inset")
-            .WithValidator(v => v.StartsWith("inset-") && !v.StartsWith("inset-x-") && !v.StartsWith("inset-y-"))
+            .WithClasses("inset-auto")
+            .WithValidator(v => v.StartsWith("inset-") && !v.StartsWith("inset-x-") && !v.StartsWith("inset-y-") &&
+                (ClassValidators.IsSpacing(v[6..]) || ClassValidators.IsFraction(v[6..]) || ClassValidators.IsArbitraryValue(v[6..])))
             .ConflictsWith("inset-x", "inset-y", "top", "right", "bottom", "left", "start", "end"));
 
         Add(new ClassGroup("inset-x")
-            .WithValidator(v => v.StartsWith("inset-x-"))
+            .WithClasses("inset-x-auto")
+            .WithValidator(v => v.StartsWith("inset-x-") && (ClassValidators.IsSpacing(v[8..]) || ClassValidators.IsFraction(v[8..]) || ClassValidators.IsArbitraryValue(v[8..])))
             .ConflictsWith("left", "right"));
 
         Add(new ClassGroup("inset-y")
-            .WithValidator(v => v.StartsWith("inset-y-"))
+            .WithClasses("inset-y-auto")
+            .WithValidator(v => v.StartsWith("inset-y-") && (ClassValidators.IsSpacing(v[8..]) || ClassValidators.IsFraction(v[8..]) || ClassValidators.IsArbitraryValue(v[8..])))
             .ConflictsWith("top", "bottom"));
 
         Add(new ClassGroup("top")
-            .WithValidator(v => v.StartsWith("top-")));
+            .WithClasses("top-auto")
+            .WithValidator(v => v.StartsWith("top-") && (ClassValidators.IsSpacing(v[4..]) || ClassValidators.IsFraction(v[4..]) || ClassValidators.IsArbitraryValue(v[4..]))));
 
         Add(new ClassGroup("right")
-            .WithValidator(v => v.StartsWith("right-")));
+            .WithClasses("right-auto")
+            .WithValidator(v => v.StartsWith("right-") && (ClassValidators.IsSpacing(v[6..]) || ClassValidators.IsFraction(v[6..]) || ClassValidators.IsArbitraryValue(v[6..]))));
 
         Add(new ClassGroup("bottom")
-            .WithValidator(v => v.StartsWith("bottom-")));
+            .WithClasses("bottom-auto")
+            .WithValidator(v => v.StartsWith("bottom-") && (ClassValidators.IsSpacing(v[7..]) || ClassValidators.IsFraction(v[7..]) || ClassValidators.IsArbitraryValue(v[7..]))));
 
         Add(new ClassGroup("left")
-            .WithValidator(v => v.StartsWith("left-")));
+            .WithClasses("left-auto")
+            .WithValidator(v => v.StartsWith("left-") && (ClassValidators.IsSpacing(v[5..]) || ClassValidators.IsFraction(v[5..]) || ClassValidators.IsArbitraryValue(v[5..]))));
 
         Add(new ClassGroup("start")
-            .WithValidator(v => v.StartsWith("start-")));
+            .WithClasses("start-auto")
+            .WithValidator(v => v.StartsWith("start-") && (ClassValidators.IsSpacing(v[6..]) || ClassValidators.IsFraction(v[6..]) || ClassValidators.IsArbitraryValue(v[6..]))));
 
         Add(new ClassGroup("end")
-            .WithValidator(v => v.StartsWith("end-")));
+            .WithClasses("end-auto")
+            .WithValidator(v => v.StartsWith("end-") && (ClassValidators.IsSpacing(v[4..]) || ClassValidators.IsFraction(v[4..]) || ClassValidators.IsArbitraryValue(v[4..]))));
 
         // ===== SVG =====
         Add(new ClassGroup("fill")

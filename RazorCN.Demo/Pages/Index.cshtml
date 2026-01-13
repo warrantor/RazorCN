@@ -25,10 +25,10 @@
     
     <h3 class="text-lg font-medium mt-8 mb-3">Sizes</h3>
     <div class="flex flex-wrap justify-center items-center gap-2 mb-8">
-        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Small", Size = "sm" })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Small", Size = ButtonSize.Sm })"/>
         <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Default" })"/>
-        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Large", Size = "lg" })"/>
-        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Extra Large", Size = "xl" })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Large", Size = ButtonSize.Lg })"/>
+        <partial name="/Pages/Shared/UI/_Button.cshtml" model="@(new ButtonModel { Text = "Extra Large", Size = ButtonSize.Xl })"/>
     </div>
     
     <h3 class="text-lg font-medium mt-8 mb-3">States</h3>
@@ -41,8 +41,8 @@
     <p class="text-muted-foreground mb-6">Same buttons using auto-generated TagHelper syntax</p>
     
     <div class="flex flex-wrap justify-center gap-2 mb-8">
-        <Button text="Default" />
-        <rcn-button text="Secondary" variant="Secondary" />
+        <rcn-button text="Default" size="xl" />
+        <rcn-button text="Secondary" variant="@ButtonVariant.Secondary" />
         <rcn-button text="Destructive" variant="Destructive" />
         <rcn-button text="Outline" variant="Outline" />
         <rcn-button text="Ghost" variant="Ghost" />
@@ -51,7 +51,7 @@
     
     <h3 class="text-lg font-medium mt-8 mb-3">With Child Content</h3>
     <div class="flex flex-wrap justify-center gap-2">
-        <rcn-button variant="Secondary">Click Me</rcn-button>
+        <rcn-button variant="Secondary" class="hover:bg-pink-400 hover:text-5xl">Click Me</rcn-button>
         <rcn-button variant="Outline" disabled="true">Disabled Button</rcn-button>
     </div>
 </div>

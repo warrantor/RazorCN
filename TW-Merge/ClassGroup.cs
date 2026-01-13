@@ -28,9 +28,5 @@ public sealed class ClassGroup(string id)
         return this;
     }
 
-    public bool Matches(string className)
-    {
-        if (ClassNames.Contains(className)) return true;
-        return Validators.Any(v => v(className));
-    }
+    public bool Matches(string className) => ClassNames.Contains(className) || Validators.Any(v => v(className));
 }

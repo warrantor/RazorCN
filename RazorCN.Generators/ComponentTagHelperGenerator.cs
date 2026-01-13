@@ -72,6 +72,7 @@ public class ComponentTagHelperGenerator : IIncrementalGenerator
             {
                 var xmlDocs = member.GetDocumentationCommentXml();
                 var summary = ExtractSummary(xmlDocs);
+                var remarks = ExtractRemarks(xmlDocs);
 
                 properties.Add(new PropertyInfo(
                     member.Name,
@@ -79,7 +80,9 @@ public class ComponentTagHelperGenerator : IIncrementalGenerator
                     member.Type.TypeKind == TypeKind.Enum,
                     GetEnumFullName(member.Type),
                     summary,
-                    HasDefaultValue(member)));
+                    remarks,
+                    HasDefaultValue(member),
+                    HasStaticDefaultField(member.Type)));
             }
         }
 
@@ -103,6 +106,14 @@ public class ComponentTagHelperGenerator : IIncrementalGenerator
         return false;
     }
 
+    private static bool HasStaticDefaultField(ITypeSymbol type)
+    {
+        // Check if the type has a static readonly field named "Default"
+        return type.GetMembers("Default")
+            .OfType<IFieldSymbol>()
+            .Any(f => f.IsStatic && f.IsReadOnly);
+    }
+
     private static string ExtractSummary(string? xmlDocs)
     {
         if (string.IsNullOrEmpty(xmlDocs))
@@ -117,6 +128,25 @@ public class ComponentTagHelperGenerator : IIncrementalGenerator
         {
             var summary = xmlDocs.Substring(startIndex + startTag.Length, endIndex - startIndex - startTag.Length);
             return summary.Trim();
+        }
+
+        return string.Empty;
+    }
+
+    private static string ExtractRemarks(string? xmlDocs)
+    {
+        if (string.IsNullOrEmpty(xmlDocs))
+            return "";
+
+        const string startTag = "<remarks>";
+        const string endTag = "</remarks>";
+        var startIndex = xmlDocs!.IndexOf(startTag, StringComparison.Ordinal);
+        var endIndex = xmlDocs.IndexOf(endTag, StringComparison.Ordinal);
+
+        if (startIndex >= 0 && endIndex > startIndex)
+        {
+            var remarks = xmlDocs.Substring(startIndex + startTag.Length, endIndex - startIndex - startTag.Length);
+            return remarks.Trim();
         }
 
         return string.Empty;
@@ -181,6 +211,10 @@ public class ComponentTagHelperGenerator : IIncrementalGenerator
         sb.AppendLine();
 
         // Constructor
+        sb.AppendLine("    /// <summary>");
+        sb.AppendLine($"    /// Initializes a new instance of the <see cref=\"{model.ComponentName}TagHelper\"/> class.");
+        sb.AppendLine("    /// </summary>");
+        sb.AppendLine("    /// <param name=\"htmlHelper\">The HTML helper for rendering partial views.</param>");
         sb.AppendLine($"    public {model.ComponentName}TagHelper(IHtmlHelper htmlHelper)");
         sb.AppendLine("    {");
         sb.AppendLine("        _htmlHelper = htmlHelper;");
@@ -196,14 +230,24 @@ public class ComponentTagHelperGenerator : IIncrementalGenerator
                 sb.AppendLine($"    /// {prop.Summary}");
                 sb.AppendLine("    /// </summary>");
             }
+            
+            if (!string.IsNullOrEmpty(prop.Remarks))
+            {
+                sb.AppendLine($"    /// <remarks>{prop.Remarks}</remarks>");
+            }
 
             var attributeName = ToKebabCase(prop.Name);
             sb.AppendLine($"    [HtmlAttributeName(\"{attributeName}\")]");
-            sb.AppendLine($"    public {prop.TypeName} {prop.Name} {{ get; set; }}{GetDefaultValueString(prop)}");
+            
+            // For record types with FromString, use string? to accept string values from attributes
+            var propertyType = prop.HasStaticDefaultField ? "string?" : prop.TypeName;
+            var defaultValue = prop.HasStaticDefaultField ? " = null;" : GetDefaultValueString(prop);
+            sb.AppendLine($"    public {propertyType} {prop.Name} {{ get; set; }}{defaultValue}");
             sb.AppendLine();
         }
 
         // ProcessAsync method
+        sb.AppendLine("    /// <inheritdoc />");
         sb.AppendLine("    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)");
         sb.AppendLine("    {");
         sb.AppendLine("        // Contextualize the HtmlHelper");
@@ -215,7 +259,15 @@ public class ComponentTagHelperGenerator : IIncrementalGenerator
 
         foreach (var prop in model.Properties)
         {
-            sb.AppendLine($"            {prop.Name} = this.{prop.Name},");
+            // For record types with FromString, convert string to record type
+            if (prop.HasStaticDefaultField)
+            {
+                sb.AppendLine($"            {prop.Name} = {prop.TypeName}.FromString(this.{prop.Name}),");
+            }
+            else
+            {
+                sb.AppendLine($"            {prop.Name} = this.{prop.Name},");
+            }
         }
 
         sb.AppendLine("        };");
@@ -260,6 +312,10 @@ public class ComponentTagHelperGenerator : IIncrementalGenerator
 
         if (prop.IsEnum && prop.EnumFullName is not null)
             return $" = default({prop.EnumFullName});";
+
+        // For record types with a static Default field (e.g., ButtonVariant.Default)
+        if (prop.HasStaticDefaultField)
+            return $" = {prop.TypeName}.Default;";
 
         if (prop.TypeName == "bool")
             return " = false;";
@@ -306,4 +362,6 @@ internal sealed record PropertyInfo(
     bool IsEnum,
     string? EnumFullName,
     string Summary,
-    bool HasDefaultValue);
+    string Remarks,
+    bool HasDefaultValue,
+    bool HasStaticDefaultField);
