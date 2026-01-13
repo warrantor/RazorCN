@@ -8,3 +8,5 @@ node_modules/
 *.min.css
 *.min.js
 *.js.map
+*.nupkg
+*.snupkg

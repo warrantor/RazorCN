@@ -7,4 +7,14 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <!-- NuGet Package Configuration -->
+    <PropertyGroup>
+        <PackageId>RazorCN.TwMerge</PackageId>
+        <Version>0.1.0</Version>
+        <Authors>RazorCN Contributors</Authors>
+        <Description>Tailwind CSS class merging utility for .NET. A port of tailwind-merge for C#.</Description>
+        <PackageTags>tailwind;css;merge;utility</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
 </Project>

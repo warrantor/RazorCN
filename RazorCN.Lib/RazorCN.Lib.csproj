@@ -13,15 +13,62 @@
         <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
     </PropertyGroup>
 
+    <!-- NuGet Package Configuration -->
+    <PropertyGroup>
+        <PackageId>RazorCN</PackageId>
+        <Version>0.1.0</Version>
+        <Authors>RazorCN Contributors</Authors>
+        <Description>A Razor Class Library with shadcn/ui-inspired components for ASP.NET Core.
+            Includes source generators for automatic TagHelper creation.</Description>
+        <PackageTags>razor;rcl;components;taghelpers;tailwind;shadcn;aspnetcore</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\TW-Merge\TW-Merge.csproj" />
+        <ProjectReference Include="..\TW-Merge\TW-Merge.csproj"
+            PrivateAssets="contentfiles;analyzers" />
         <ProjectReference Include="..\RazorCN.Generators\RazorCN.Generators.csproj"
-                          OutputItemType="Analyzer"
-                          ReferenceOutputAssembly="false" />
+            OutputItemType="Analyzer"
+            ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
+    <!-- Pack the source generator analyzer into this package -->
+    <PropertyGroup>
+        <TargetsForTfmSpecificBuildOutput>
+            $(TargetsForTfmSpecificBuildOutput);IncludeAnalyzersInPackage</TargetsForTfmSpecificBuildOutput>
+    </PropertyGroup>
+    <Target Name="IncludeAnalyzersInPackage">
+        <ItemGroup>
+            <TfmSpecificPackageFile
+                Include="..\RazorCN.Generators\bin\$(Configuration)\netstandard2.0\RazorCN.Generators.dll"
+                PackagePath="analyzers/dotnet/cs" />
+        </ItemGroup>
+    </Target>
+
+    <!-- Exclude node/TypeScript config files from the package -->
+    <ItemGroup>
+        <Content Remove="package.json;tsconfig.json;pnpm-lock.yaml;pnpm-workspace.yaml" />
+        <Content Update="wwwroot\css\razorcn.css">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\css\razorcn.min.css">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\js\razorcn.js">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\js\razorcn.js.map">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\js\razorcn.min.js">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <!-- Ensure pnpm dependencies are installed -->
