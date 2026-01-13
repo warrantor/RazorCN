@@ -1,0 +1,37 @@
+﻿@page
+@model IndexModel
+@using RazorCN.Lib.Pages.Shared
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="text-4xl font-bold tracking-tight mb-2">Welcome</h1>
+    <p class="text-muted-foreground mb-8">Learn about <a class="text-primary hover:underline" href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    
+    <h2 class="text-xl font-semibold mt-12 mb-3">RazorCN Button Components</h2>
+    <p class="text-muted-foreground mb-6">shadcn-style buttons built with Tailwind CSS v4</p>
+    
+    <div class="flex flex-wrap justify-center gap-2 mb-8">
+        <partial name="_Button" model="@(new ButtonModel { Text = "Default" })"/>
+        <partial name="_Button" model="@(new ButtonModel { Text = "Secondary", Variant = ButtonVariant.Secondary })"/>
+        <partial name="_Button" model="@(new ButtonModel { Text = "Destructive", Variant = ButtonVariant.Destructive })"/>
+        <partial name="_Button" model="@(new ButtonModel { Text = "Outline", Variant = ButtonVariant.Outline })"/>
+        <partial name="_Button" model="@(new ButtonModel { Text = "Ghost", Variant = ButtonVariant.Ghost })"/>
+        <partial name="_Button" model="@(new ButtonModel { Text = "Link", Variant = ButtonVariant.Link })"/>
+    </div>
+    
+    <h3 class="text-lg font-medium mt-8 mb-3">Sizes</h3>
+    <div class="flex flex-wrap justify-center items-center gap-2 mb-8">
+        <partial name="_Button" model="@(new ButtonModel { Text = "Small", Size = "sm" })"/>
+        <partial name="_Button" model="@(new ButtonModel { Text = "Default" })"/>
+        <partial name="_Button" model="@(new ButtonModel { Text = "Large", Size = "lg" })"/>
+        <partial name="_Button" model="@(new ButtonModel { Text = "Extra Large", Size = "xl" })"/>
+    </div>
+    
+    <h3 class="text-lg font-medium mt-8 mb-3">States</h3>
+    <div class="flex flex-wrap justify-center gap-2">
+        <partial name="_Button" model="@(new ButtonModel { Text = "Enabled" })"/>
+        <partial name="_Button" model="@(new ButtonModel { Text = "Disabled", Disabled = true })"/>
+    </div>
+</div>

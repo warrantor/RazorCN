@@ -1,0 +1,35 @@
+{
+    "name": "razorcn-lib",
+    "version": "1.0.0",
+    "description": "RazorCN Component Library - Tailwind CSS styles and utilities",
+    "type": "module",
+    "scripts": {
+        "build:css": "tailwindcss -i ./Styles/razorcn.css -o ./wwwroot/css/razorcn.min.css --minify",
+        "build:js": "esbuild Scripts/index.ts --bundle --minify --format=esm --outfile=./wwwroot/js/razorcn.min.js",
+        "build": "pnpm run build:css && pnpm run build:js",
+        "dev:css": "tailwindcss -i ./Styles/razorcn.css -o ./wwwroot/css/razorcn.css --watch",
+        "dev:js": "esbuild Scripts/index.ts --bundle --format=esm --sourcemap --outfile=./wwwroot/js/razorcn.js --watch",
+        "dev": "concurrently \"pnpm run dev:css\" \"pnpm run dev:js\"",
+        "typecheck": "tsc --noEmit"
+    },
+    "keywords": [
+        "razorcn",
+        "tailwind",
+        "components"
+    ],
+    "author": "",
+    "license": "ISC",
+    "packageManager": "pnpm@11.0.0-dev.1005",
+    "dependencies": {
+        "clsx": "^2.1.1",
+        "tailwind-merge": "^2.6.0"
+    },
+    "devDependencies": {
+        "@tailwindcss/cli": "^4.1.18",
+        "@types/node": "^22.10.0",
+        "concurrently": "^9.1.0",
+        "esbuild": "^0.24.0",
+        "tailwindcss": "^4.1.18",
+        "typescript": "^5.7.0"
+    }
+}

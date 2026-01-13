@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="RazorCN.Demo/RazorCN.Demo.csproj" />
+  <Project Path="RazorCN.Lib/RazorCN.Lib.csproj" />
+  <Project Path="TW-Merge/TW-Merge.csproj" />
+</Solution>

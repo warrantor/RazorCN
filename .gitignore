@@ -1,0 +1,10 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.pnpm-store/
+node_modules/
+*.min.css
+*.min.js
+*.js.map

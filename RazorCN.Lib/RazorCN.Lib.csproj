@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\TW-Merge\TW-Merge.csproj" />
+    </ItemGroup>
+
+    <!-- Ensure pnpm dependencies are installed -->
+    <Target Name="PnpmInstall" BeforeTargets="PnpmBuild"
+        Condition="!Exists('$(MSBuildProjectDirectory)/node_modules')">
+        <Message Importance="high" Text="Installing pnpm dependencies..." />
+        <Exec Command="pnpm install" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    </Target>
+
+    <!-- Build frontend assets (CSS + JS) before .NET build -->
+    <Target Name="PnpmBuild" BeforeTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
+        <Message Importance="high" Text="Building Tailwind CSS and TypeScript..." />
+        <Exec Command="pnpm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    </Target>
+
+</Project>
