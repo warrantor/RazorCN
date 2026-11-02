@@ -10,3 +10,7 @@ node_modules/
 *.js.map
 *.nupkg
 *.snupkg
+
+# local NuGet overrides (credentials must never be committed)
+Nuget.Config.local
+Nuget.config.user
